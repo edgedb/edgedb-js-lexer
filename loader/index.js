@@ -1,3 +1,6 @@
+// This a vanilla JS file because we don't want TypeScript
+// to mess with the dynamic "import()" call.
+
 let lib = null;
 
 async function loadLib() {
