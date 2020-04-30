@@ -1,0 +1,27 @@
+{
+  "name": "@edgedb/lexer",
+  "description": "EdgeQL Lexer",
+  "homepage": "https://github.com/edgedb/edgedb-js-lexer",
+  "author": "EdgeDB <info@edgedb.com>",
+  "engines": {
+    "node": ">= 10.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/edgedb/edgedb-js-lexer.git"
+  },
+  "version": "0.0.3",
+  "main": "./pkg/index.js",
+  "types": "./pkg/index.d.ts",
+  "license": "Apache-2.0",
+  "files": [
+    "/pkg",
+    "/loader"
+  ],
+  "scripts": {
+    "build": "cargo build && wasm-pack build && sed -i -e \"s/from 'error'/from '.\\/error'/g\" pkg/edgeql_wasm_bg.js && tsc"
+  },
+  "devDependencies": {
+    "typescript": "^3.8.3"
+  }
+}
