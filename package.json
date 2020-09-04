@@ -22,6 +22,7 @@
     "build": "cargo build && wasm-pack build && sed -i -e \"s/from 'error'/from '.\\/error'/g\" pkg/edgeql_wasm_bg.js && tsc"
   },
   "devDependencies": {
-    "typescript": "^3.8.3"
+    "typescript": "^3.8.3",
+    "wasm-pack": "^0.9.1"
   }
 }
