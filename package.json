@@ -19,7 +19,8 @@
     "/loader"
   ],
   "scripts": {
-    "build": "cargo build && wasm-pack build && sed -i -e \"s/from 'error'/from '.\\/error'/g\" pkg/edgeql_wasm_bg.js && tsc"
+    "extractTokens": "wasm-pack build --out-dir temp --target nodejs && sed -i -e \"s/require(String.raw\\`error\\`)/require(String.raw\\`.\\/error\\`)/\" temp/edgeql_wasm.js && tsc --outDir temp && node extractTokens > src/tokens.ts && rm -r temp",
+    "build": "cargo build && wasm-pack build && sed -i -e \"s/from 'error'/from '.\\/error'/g\" pkg/edgeql_wasm_bg.js && yarn run extractTokens && tsc"
   },
   "devDependencies": {
     "typescript": "^3.8.3"
