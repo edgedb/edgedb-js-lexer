@@ -15,9 +15,12 @@ wasm-bindgen = {version="0.2", features=["serde-serialize"]}
 js-sys = "0.3.38"
 serde = {version="1.0.106", features=["derive"]}
 combine = "4.0.0-beta.1"
-edgeql-parser = {git = "https://github.com/edgedb/edgedb"}
 console_error_panic_hook = { version = "0.1.1", optional = true }
 wee_alloc = { version = "0.4.2", optional = true }
+
+[dependencies.edgeql-parser]
+features=["wasm-lexer"]
+git = "https://github.com/edgedb/edgedb"
 
 [dev-dependencies]
 wasm-bindgen-test = "0.2"
