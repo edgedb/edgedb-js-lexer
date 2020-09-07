@@ -44,13 +44,20 @@ pub fn lexEdgeQL(input: &str) -> Result<JsValue, JsValue> {
     })
 }
 
+fn utf16_size(string_chunk: &str) -> usize {
+    string_chunk
+        .chars()
+        .map(|x| x.len_utf16())
+        .sum()
+}
+
 pub fn lex_edgeql(input: &str) -> Result<Vec<Token>, TokenizerError> {
     utils::set_panic_hook();
 
     let mut token_stream = TokenStream::new(&input);
     let mut tokens = Vec::new();
-    let mut utf16_offset: usize = 0;
     let mut pos = token_stream.current_pos();
+    let mut utf16_offset = utf16_size(&input[..pos.offset as usize]);
     while let Some(res) = (&mut token_stream).next() {
         match res {
             Ok(t) => {
@@ -63,20 +70,17 @@ pub fn lex_edgeql(input: &str) -> Result<Vec<Token>, TokenizerError> {
                         offset: utf16_offset,
                     },
                 });
-                let old_offset = pos.offset as usize;
+                let old = pos.offset as usize;
                 pos = token_stream.current_pos();
-                utf16_offset += input[old_offset..pos.offset as usize].chars()
-                    .map(|x| x.len_utf16())
-                    .sum::<usize>();
+                let new = pos.offset as usize;
+                utf16_offset += utf16_size(&input[old..new]);
             }
             Err(e) => {
                 let pos = token_stream.current_pos();
                 let position = Position {
                     line: pos.line,
                     column: pos.column,
-                    offset: input[..pos.offset as usize].chars()
-                        .map(|x| x.len_utf16())
-                        .sum(),
+                    offset: utf16_size(&input[..pos.offset as usize]),
                 };
                 let message = match e {
                     Error::Unexpected(s) => s.to_string(),
