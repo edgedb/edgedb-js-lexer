@@ -13,7 +13,7 @@ static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 
 #[derive(Debug, Clone, Serialize)]
 pub struct Token {
-    pub kind: String,
+    pub kind: edgeql_parser::tokenizer::Kind,
     pub value: String,
     pub position: Position,
 }
@@ -29,7 +29,6 @@ pub struct Position {
 #[wasm_bindgen(module="error")]
 extern "C" {
     pub type TokenizerError;
-
     #[wasm_bindgen(constructor)]
     fn new(message: String, position: Position) -> TokenizerError;
 }
@@ -55,7 +54,7 @@ pub fn lex_edgeql(input: &str) -> Result<Vec<Token>, TokenizerError> {
         match res {
             Ok(t) => {
                 tokens.push(Token {
-                    kind: format!("{:?}", t.token.kind),
+                    kind: t.token.kind,
                     value: t.token.value.into(),
                     position: Position {
                         line: pos.line,
